@@ -15,39 +15,30 @@
 
 ### NS_ACCOUNT 格式
 
-**格式一：统一密码**（所有账号同一个密码）
+**格式一：统一密码**
+
 ```json
 {
   "password": "统一密码",
   "accounts": [
-    "email1@gmail.com",
-    "email2@gmail.com"
+    {"email": "email1@gmail.com", "name": "昵称1"},
+    {"email": "email2@gmail.com", "name": "昵称2"}
   ]
 }
 ```
 
-**格式二：独立密码**（每个账号单独密码）
+**格式二：独立密码**
+
 ```json
 {
   "accounts": [
-    {"email": "email1@gmail.com", "password": "pass1"},
-    {"email": "email2@gmail.com", "password": "pass2"}
+    {"email": "email1@gmail.com", "password": "pass1", "name": "昵称1"},
+    {"email": "email2@gmail.com", "password": "pass2", "name": "昵称2"}
   ]
 }
 ```
 
-**格式三：混用**（顶层密码作为默认值，单个账号可单独覆盖）
-```json
-{
-  "password": "默认密码",
-  "accounts": [
-    "email1@gmail.com",
-    {"email": "email2@gmail.com", "password": "独立密码"}
-  ]
-}
-```
-
-> 填入 Secret 时请将 JSON 压缩为一行。
+> `name` 为可选字段，不填则自动使用邮箱前缀作为名字。填入 Secret 时请将 JSON 压缩为一行。
 
 ## 📝 PRIVATE_REPO_TOKEN 生成方式
 
@@ -60,17 +51,19 @@ GitHub → Settings → Developer settings → Personal access tokens → Tokens
 3. 将两者用英文逗号拼接填入 Secret，格式：`chatid,token`
 
 ## 📨 推送示例
+
 ```
 🍗 NodeSeek 多账号签到汇报
 🕐 运行时间: 2025-01-01 08:00:00
 📊 共21个账号  ✅19成功  ☑️2已签  ❌0失败
 
 ✅ 本次签到成功：
-  · email1@gmail.com  +5 🍗
-  · email2@gmail.com  +5 🍗
+  · 阿基拉  +5 🍗
+  · AsukaTenjoin  +5 🍗
 
 ☑️ 今日已签到：
-  · email3@aol.com  +5 🍗
+  · Pungwing  +5 🍗
+  · 洛思  +5 🍗
 ```
 
 ## ⚙️ 运行说明
