@@ -1,30 +1,31 @@
-name: NodeSeek-Auto-Checkin
+name: NodeSeek-Checkin-Action
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 2 * * *' # 每天 UTC 时间 02:00 运行
+    - cron: '30 0 * * *' # 北京时间 08:30
+
 jobs:
   run_nodeseek_checkin:
     runs-on: ubuntu-latest
     steps:
-      - name: 📥 下载公库代码 (Nodeseek-Checkin)
+      - name: 📥 下载公库代码
         uses: actions/checkout@v4
-        
-      - name: 📥 下载私库脚本 (Nodeseek-Checkin-Private)
+
+      - name: 📥 下载私库脚本
         uses: actions/checkout@v4
         with:
           repository: ${{ github.repository_owner }}/Nodeseek-Checkin-Private
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
           path: private
-          
+
       - name: 📂 移动脚本到工作目录
         run: mv private/nodeseek_checkin.py nodeseek_checkin.py
-        
+
       - name: 🐍 设置 Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-          
+
       - name: 🛡️ 启动 Gost 代理转发
         run: |
           wget https://github.com/ginuerzh/gost/releases/download/v2.11.5/gost-linux-amd64-2.11.5.gz
@@ -34,36 +35,30 @@ jobs:
           echo "启动 Gost 转发隧道..."
           nohup ./gost -L http://:8080 -F ${{ secrets.GOST_PROXY }} > gost.log 2>&1 &
           sleep 3
-          echo "测试本地代理连通性..."
           curl -x http://127.0.0.1:8080 https://api.ipify.org -v
-          
-      - name: 🛠️ 安装系统依赖 (Xvfb & xdotool)
+
+      - name: 🛠️ 安装系统依赖
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            google-chrome-stable \
-            xvfb \
-            x11-utils \
-            xdotool \
-            scrot
-            
+          sudo apt-get install -y google-chrome-stable xvfb x11-utils xdotool scrot
+
       - name: 🐍 安装 Python 依赖
         run: |
-          pip install seleniumbase
+          pip install seleniumbase requests
           seleniumbase install chromedriver
-          
-      - name: 🚀 运行签到脚本
+
+      - name: 🚀 运行脚本
         env:
           PYTHONIOENCODING: utf-8
-          NODESEEK_ACCOUNT: ${{ secrets.NODESEEK_ACCOUNT }} 
-          GOST_PROXY: ${{ secrets.GOST_PROXY }}
+          NS_ACCOUNT: ${{ secrets.NS_ACCOUNT }}
           TG_BOT: ${{ secrets.TG_BOT }}
+          GOST_PROXY: ${{ secrets.GOST_PROXY }}
         run: |
           xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" python nodeseek_checkin.py
-          
-      - name: 📸 上传报错截图
+
+      - name: 📸 上传截图
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: debug-screenshots
+          name: nodeseek-debug-screenshots
           path: "*.png"
