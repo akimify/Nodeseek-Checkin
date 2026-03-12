@@ -44,28 +44,6 @@
 
 GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token (classic) → 勾选 `repo` + `workflow` → Generate token → 填入 Secret。
 
-## 📝 TG_BOT 获取方式
-
-1. Telegram 搜索 `@BotFather` → `/newbot` → 创建机器人 → 获取 Bot Token
-2. 搜索 `@userinfobot` → 发送任意消息 → 获取你的 Chat ID
-3. 将两者用英文逗号拼接填入 Secret，格式：`chatid,token`
-
-## 📨 推送示例
-
-```
-🍗 NodeSeek 多账号签到汇报
-🕐 运行时间: 2025-01-01 08:00:00
-📊 共21个账号  ✅19成功  ☑️2已签  ❌0失败
-
-✅ 本次签到成功：
-  · 阿基拉  +5 🍗
-  · AsukaTenjoin  +5 🍗
-
-☑️ 今日已签到：
-  · Pungwing  +5 🍗
-  · 洛思  +5 🍗
-```
-
 ## ⚙️ 运行说明
 
 - 每天自动定时触发，无需手动操作
