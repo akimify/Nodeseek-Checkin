@@ -1,8 +1,6 @@
 name: NodeSeek-Checkin-Action
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '30 0 * * *' # 北京时间 08:30
 
 jobs:
   run_nodeseek_checkin:
